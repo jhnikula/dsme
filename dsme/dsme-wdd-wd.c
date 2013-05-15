@@ -119,6 +119,23 @@ static void check_for_wd_flags(bool wd_enabled[])
     return;
 }
 
+void dsme_wd_close(void)
+{
+    int i;
+
+    for (i = 0; i < WD_COUNT; ++i) {
+        if (wd_fd[i] != -1)
+            /*
+             * Try "Magic Close" feature of watchdog driver by sending 'V'
+             * before closing it. If driver and hw supports it the watchdog
+             * will be disabled
+             */
+            if (write(wd_fd[i], "V", 1) < 1) {}
+            close(wd_fd[i]);
+            wd_fd[i] = -1;
+    }
+}
+
 bool dsme_wd_init(void)
 {
     int  opened_wd_count = 0;

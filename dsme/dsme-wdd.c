@@ -484,5 +484,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, ME "Couldn't remove lockfile: %m\n");
     }
 
+    dsme_wd_close();
+
     return EXIT_SUCCESS;
 }
